@@ -20,6 +20,8 @@ Service in the afeefa universe which is responsible for everything that is sendi
     - entry data is invalid > need to update
     - entry is obsolete > please delete
 
+![User Journey for Owner](readme/user-journey-of-owner-for-invoking-update-process.jpg)
+
 ## Implementation
 - use magic edit links? life time lasts for one interaction or for a certain time X? 
 
