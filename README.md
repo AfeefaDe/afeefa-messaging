@@ -46,11 +46,6 @@ Service in the afeefa universe which is responsible for everything that is sendi
 
 ### F) Frontend user gives feedback to afeefa
 
-## Interesting data to save
-- logging when a mail was sent and for which purpose:
-    - mail type, e.g. "publication info"
-    - data context, e.g. ID of the published entry, backend user who invoked the mail etc.
-
 ## Implementation
 ![Communication Flow Diagram](readme/afeefa-message-api-diagram.svg)
 
@@ -61,24 +56,28 @@ Service in the afeefa universe which is responsible for everything that is sendi
 
 ### Typical tasks to handle
 
-**Authenticate request**
+**Routing** > `Router`
+
+**Authenticate request** > `Router`
 - check request origin (CORS)
 - limit similar requests to a maximum per time or sth.
 - further authentication to avoid DoS like attacks
 
-**Building the message**
+**Building the message** > `MessageBuilder`
 - combine incoming dynamic data with message templates
 - create a readable message for each communication platform to serve (e.g. responsive mails for various clients)
 
-**Sending the message**
+**Sending the message** > `Messenger`
 - e.g. use SMTP mailer for mails
 
-**Receiving answer from the recipient**
-- e.g. a text message
+**Receiving answer from the recipient** > `Reception`
+- handle link openings, analyse and may forward to the right service or sth.
+- handle text messages
 
-**Logging**
-- message activity:
-    - sent what + why
+**Logging** > `Logger`
+- what was sent and why
+    - mail type, e.g. "publication info"
+    - data context, e.g. ID of the published entry, backend user who invoked the mail etc.
     - delivery status
 - recipient activity:
     - interaction, e.g. mail opened, links clicked etc.
@@ -98,3 +97,13 @@ Service in the afeefa universe which is responsible for everything that is sendi
 - needs information from `afeefa-backend-api` about outdated entries to send the emails
 - needs end points for entry editing, which are handed out to the users (data ok, data update, data delete ...)
 - where to keep the information, that some messaging happened?
+
+## Development
+1. set SMTP config for your mailing service
+2. set database config for messaging-related logging
+1. run root folder with `index.php` on php, e.g.
+`php -S localhost:3010`
+
+## Deployment
+1. checkout repo in a desired place
+2. Install all dependencies with composer (see *composer.json*)
