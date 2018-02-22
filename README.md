@@ -44,6 +44,8 @@ Service in the afeefa universe which is responsible for everything that is sendi
 
 ### E) Frontend user contacts an entry via the provided message form
 
+### F) Frontend user gives feedback to afeefa
+
 ## Interesting data to save
 - logging when a mail was sent and for which purpose:
     - mail type, e.g. "publication info"
@@ -52,16 +54,41 @@ Service in the afeefa universe which is responsible for everything that is sendi
 ## Implementation
 ![Communication Flow Diagram](readme/afeefa-message-api-diagram.svg)
 
-**Magic links**
+### Magic links
 - each time an admin mail is sent out, the backend.api creates a new backend user (cryptic), that just behaves like a normal backend user with a specific role (e.g. role = ORGAADMIN) and access to the necessary data records
 - this user is associated with a magic link, which contains information to authenticate and login that user (might simply be the cryptic user name + password)
 - the link calls an extra B.API endpoint (or even the B.UI's /login route), that automatically reads the GET parameters, creates a user session and redirects to the right backend view to edit the requested entry
+
+### Typical tasks to handle
+
+**Authenticate request**
+- check request origin (CORS)
+- limit similar requests to a maximum per time or sth.
+- further authentication to avoid DoS like attacks
+
+**Building the message**
+- combine incoming dynamic data with message templates
+- create a readable message for each communication platform to serve (e.g. responsive mails for various clients)
+
+**Sending the message**
+- e.g. use SMTP mailer for mails
+
+**Receiving answer from the recipient**
+- e.g. a text message
+
+**Logging**
+- message activity:
+    - sent what + why
+    - delivery status
+- recipient activity:
+    - interaction, e.g. mail opened, links clicked etc.
 
 ### Routes
 
 | Route | Method | Params | Return | Description
 |-|-|-|-|-
-|/send/dustyMails| POST | | | case A
+|/send/dustyMails| POST | entries: [] | | case A
+||| entry: {**entry_id** :int, **entry_type** :string(actor/offer/event/ressource), **recipient_email** :address, **title** :string, **last_updated** :time } | |
 |/send/adminLinkToOwner| POST ||| case B
 |/send/newEntryInfo| POST ||| case C
 |/send/editorMessageToContact| POST ||| case D
