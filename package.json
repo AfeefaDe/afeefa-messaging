@@ -1,0 +1,23 @@
+{
+  "name": "afeefa-messaging",
+  "version": "1.0.0",
+  "description": "Service in the afeefa universe which is responsible for everything that is sending and receiving messages like mails or push notifications etc.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "mjml": "^3.3.5",
+    "mjml-utils": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AfeefaDe/afeefa-messaging.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/AfeefaDe/afeefa-messaging/issues"
+  },
+  "homepage": "https://github.com/AfeefaDe/afeefa-messaging#readme"
+}

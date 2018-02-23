@@ -7,14 +7,63 @@ class MessageBuilder{
   }
 	
 	public function testMail( $data ){
+		// prepare placeholder data for message
+		$placeholders = array(
+			"heading" => "Test Mail",
+			"main_message" => "This is a test mail.",
+			"author_name" => "Cheers from " . $_SERVER['HTTP_HOST'],
+			"signature" => "Afeefa - Digitaler Zusammenhalt e.V."
+		);
+
+		// merge placeholder data into template
+		$html = $this->merge('test', $placeholders);
+		
+		// return generated message string
 		return array(
-			"html"=>"<p><strong>test mail sent from " . $_SERVER['HTTP_HOST'] . "</strong></p>",
-			"text"=>"test mail sent from " . $_SERVER['HTTP_HOST'],
+			"html"=>$html,
+			"text"=>$html,
 			"subject"=>"Test mail",
 			"from" => array("address" => "team@afeefa.de", "name" => "Afeefa.de")
 		);
 	}
 
+	public static function merge($template, array $placeholders, $errPlaceholder = null)
+	{
+		// load template file
+		$file = './mail_templates/' .$template. '.html';
+		if (file_exists($file)) {
+			$string = file_get_contents($file);
+		}
+
+		// replace placeholder
+		$escapeChar = '@';
+		$esc = preg_quote($escapeChar);
+		$expr = "/
+			$esc$esc(?=$esc*+{{)
+		  | $esc{
+		  | {{(\w+)}}
+		/x";
+
+		$callback = function ($match) use ($placeholders, $escapeChar, $errPlaceholder) {
+			switch ($match[0]) {
+				case $escapeChar . $escapeChar:
+					return $escapeChar;
+
+				case $escapeChar . '{':
+					return '{';
+
+				default:
+					if (isset($placeholders[$match[1]])) {
+						return $placeholders[$match[1]];
+					}
+
+					return isset($errPlaceholder) ? $errPlaceholder : $match[0];
+			}
+		};
+
+		return preg_replace_callback($expr, $callback, $string);
+	}
+	
 	// /**
 	//  * @param $user
 	//  * @return String
@@ -33,55 +82,6 @@ class MessageBuilder{
 	// 	return $html;
 	// }
 
-	// /**
-	//  * @param $msg
-	//  * @param array $variables
-	//  * @return mixed
-	//  */
-	// public static function personalizeMsg($msg, array $variables)
-	// {
-	// 	$file = './res/msg/' . $msg . '.txt';
-	// 	if (file_exists($file))
-	// 		return MessageCenter::parse(file_get_contents($file), $variables);
-	// 	else
-	// 		return "Error: The template named '" . $msg . "' does not exist.";
-	// }
-
-	// /**
-	//  * @param $string
-	//  * @param array $variables
-	//  * @param null $errPlaceholder
-	//  * @return mixed
-	//  */
-	// public static function parse($string, array $variables, $errPlaceholder = null)
-	// {
-	// 	$escapeChar = '@';
-	// 	$esc = preg_quote($escapeChar);
-	// 	$expr = "/
-	// 		$esc$esc(?=$esc*+{)
-	// 	  | $esc{
-	// 	  | {(\w+)}
-	// 	/x";
-
-	// 	$callback = function ($match) use ($variables, $escapeChar, $errPlaceholder) {
-	// 		switch ($match[0]) {
-	// 			case $escapeChar . $escapeChar:
-	// 				return $escapeChar;
-
-	// 			case $escapeChar . '{':
-	// 				return '{';
-
-	// 			default:
-	// 				if (isset($variables[$match[1]])) {
-	// 					return $variables[$match[1]];
-	// 				}
-
-	// 				return isset($errPlaceholder) ? $errPlaceholder : $match[0];
-	// 		}
-	// 	};
-
-	// 	return preg_replace_callback($expr, $callback, $string);
-	// }
 
 	// /**
 	//  * @param string $version

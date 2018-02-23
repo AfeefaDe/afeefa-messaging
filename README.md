@@ -103,10 +103,13 @@ Service in the afeefa universe which is responsible for everything that is sendi
 
 ## Development
 1. checkout repo in a desired place
-2. Install all dependencies via `$ composer install`
+2. Install all dependencies via `$ composer install` AND `$ npm install`
 3. create config files `/config/smtpconf.ini` and `/config/auth.ini` from provided example files
 1. run root folder with `index.php` on php, e.g. `$ php -S localhost:3010`
 1. fire requests to the routes, e.g. using postman
+
+**render mail templates**
+- `./node_modules/.bin/mju --watch -i ./mail_templates -o ./mail_templates_built`
 
 ## Deployment
 1. checkout repo in a desired place

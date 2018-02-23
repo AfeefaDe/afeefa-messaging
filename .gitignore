@@ -4,6 +4,9 @@ vendor/
 config/smtpconf.ini
 config/auth.ini
 
+composer.lock
+package-lock.json
+
 # Logs
 logs
 *.log
