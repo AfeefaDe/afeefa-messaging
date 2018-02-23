@@ -82,20 +82,8 @@ Service in the afeefa universe which is responsible for everything that is sendi
 - recipient activity:
     - interaction, e.g. mail opened, links clicked etc.
 
-### Routes
-- parameters are expected to come inside json
-- each request needs to authenticate with the right `key`
-
-| Route | Method | Params | Return | Description
-|-|-|-|-|-
-|/| * | string **key** | |
-|/send/test| POST | address **to**, string **key** | |
-|/send/dustyMails| POST | entries: [] | | case A
-||| entry: {**entry_id** :int, **entry_type** :string(actor/offer/event/ressource), **recipient_email** :address, **title** :string, **last_updated** :time } | |
-|/send/adminLinkToOwner| POST ||| case B
-|/send/newEntryInfo| POST ||| case C
-|/send/messageFromEditorToOwner| POST ||| case D
-|/send/messageFromUserToOwner| POST ||| case E
+## Routes
+see index route `/` which renders a tiny API doc
 
 ## Dependencies to other services
 - needs information from `afeefa-backend-api` about outdated entries to send the emails
