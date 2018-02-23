@@ -61,11 +61,11 @@ Service in the afeefa universe which is responsible for everything that is sendi
 **Authenticate request** > `Router`
 - check request origin (CORS)
 - limit similar requests to a maximum per time or sth.
-- further authentication to avoid DoS like attacks
+- further more require a secret key
 
 **Building the message** > `MessageBuilder`
 - combine incoming dynamic data with message templates
-- create a readable message for each communication platform to serve (e.g. responsive mails for various clients)
+- create a readable message for each communication platform to serve, e.g. responsive mails for various clients in HTML and plain text
 
 **Sending the message** > `Messenger`
 - e.g. use SMTP mailer for mails
@@ -83,9 +83,13 @@ Service in the afeefa universe which is responsible for everything that is sendi
     - interaction, e.g. mail opened, links clicked etc.
 
 ### Routes
+- parameters are expected to come inside json
+- each request needs to authenticate with the right `key`
 
 | Route | Method | Params | Return | Description
 |-|-|-|-|-
+|/| * | string **key** | |
+|/send/test| POST | address **to**, string **key** | |
 |/send/dustyMails| POST | entries: [] | | case A
 ||| entry: {**entry_id** :int, **entry_type** :string(actor/offer/event/ressource), **recipient_email** :address, **title** :string, **last_updated** :time } | |
 |/send/adminLinkToOwner| POST ||| case B
@@ -96,14 +100,15 @@ Service in the afeefa universe which is responsible for everything that is sendi
 ## Dependencies to other services
 - needs information from `afeefa-backend-api` about outdated entries to send the emails
 - needs end points for entry editing, which are handed out to the users (data ok, data update, data delete ...)
-- where to keep the information, that some messaging happened?
 
 ## Development
-1. set SMTP config for your mailing service
-2. set database config for messaging-related logging
-1. run root folder with `index.php` on php, e.g.
-`php -S localhost:3010`
+1. checkout repo in a desired place
+2. Install all dependencies via `$ composer install`
+3. create config files `/config/smtpconf.ini` and `/config/auth.ini` from provided example files
+1. run root folder with `index.php` on php, e.g. `$ php -S localhost:3010`
+1. fire requests to the routes, e.g. using postman
 
 ## Deployment
 1. checkout repo in a desired place
-2. Install all dependencies with composer (see *composer.json*)
+2. Install all dependencies via `$ composer install`
+3. create config files `/config/smtpconf.ini` and `/config/auth.ini` from provided example files

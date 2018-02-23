@@ -1,63 +1,59 @@
 <?php
+require 'src/MessageBuilder.php';
+require 'src/Messenger.php';
 
 class Router{
-  public $make;
-  public $model;
 
-  /**
-	 * constructor
-	 */
-	public function __construct()
-	{
+	public function __construct() {
     $this->defineRoutes();
     Flight::start();
   }
   
-  public function defineRoutes(){
+  public function defineRoutes() {
     Flight::route('/', function(){
       echo 'Afeefa Message API index route, nothing here to do';
+      die;
     });
 
-    Flight::route('POST /send/test', function(){
+    Flight::route('POST /send/test', function() {
       
-      $json = $this->validateRequest();
-      
-      # send mail to given address
-      echo "sending test mail to: " . $json->to;
-    });
-
-    Flight::route('GET /send/userMessageToContact', function(){
       $json = $this->validateRequest();
       
       # build message
+      $MessageBuilder = new MessageBuilder;
+      $message = $MessageBuilder->testMail($json);
+
       # send message
+      $Messenger = new Messenger;
+      $Messenger->send($message, $json);
       # log messaging
+    });
+
+    Flight::route('GET /send/userMessageToContact', function() {
+      $json = $this->validateRequest();
     });
   }
   
-  public function auth(){
-    $valid = true;
-    if(!$valid) {
-      Flight::halt(401, "access denied");
-      die;
-    }
-  }
-
-  public function validateRequest(){
+  public function validateRequest() {
+    // authenticate
     $this->auth();
     
     // check parameters
     $req_data = Flight::request()->data;
-    if(count($req_data)) {
+    if (count($req_data)) {
       return $req_data;
-    }
-    else {
+    } else {
       Flight::halt(400, 'please provide json data as required; also be sure to set "Content-Type" header to "application/json"');
       die;
     }
-
-    // check other things
-    // ...
+  }
+  
+  public function auth() {
+    $conf = parse_ini_file('config/auth.ini');
+    if ( Flight::request()->data->key !== $conf['key']) {
+      Flight::halt(401, "access denied");
+      die;
+    }
   }
 }
 
