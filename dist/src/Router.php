@@ -13,7 +13,7 @@ class Router{
     Flight::route('/', function(){
       $json = $this->validateRequest();
       
-      echo 'Afeefa Message API index route, nothing here to do';
+      include('views/index.html');
     });
 
     Flight::route('POST /send/test', function() {
@@ -26,10 +26,13 @@ class Router{
 
       # send message
       $Messenger = new Messenger;
-      $Messenger->send($message, $json);
+      $status = $Messenger->send($message, $json);
+      Flight::halt($status['code'], $status['message']);
       
       # log messaging
       # ...
+
+      die;
     });
 
     Flight::route('GET /send/userMessageToContact', function() {

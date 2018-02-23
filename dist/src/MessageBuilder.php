@@ -2,17 +2,18 @@
 
 class MessageBuilder{
 
+	public $template_vars;
+
 	public function __construct()
 	{
-  }
+		// set template presets
+		$this->template_vars = include('./config/template_vars.php');
+  	}
 	
 	public function testMail( $data ){
-		// prepare placeholder data for message
+		// prepare placeholder data for template
 		$placeholders = array(
-			"heading" => "Test Mail",
-			"main_message" => "This is a test mail.",
-			"author_name" => "Cheers from " . $_SERVER['HTTP_HOST'],
-			"signature" => "Afeefa - Digitaler Zusammenhalt e.V."
+			"host" => $_SERVER['HTTP_HOST']
 		);
 
 		// merge placeholder data into template
@@ -30,7 +31,7 @@ class MessageBuilder{
 	public static function merge($template, array $placeholders, $errPlaceholder = null)
 	{
 		// load template file
-		$file = './mail_templates/' .$template. '.html';
+		$file = './templates/mail/' .$template. '.html';
 		if (file_exists($file)) {
 			$string = file_get_contents($file);
 		}

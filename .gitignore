@@ -1,8 +1,9 @@
 readme/diagram.xd
 vendor/
 
-config/smtpconf.ini
-config/auth.ini
+dist/config/smtpconf.ini
+dist/config/auth.ini
+dist/config/template_vars.php
 
 composer.lock
 package-lock.json

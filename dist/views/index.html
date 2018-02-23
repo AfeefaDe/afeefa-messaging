@@ -1,0 +1,128 @@
+<html>
+	<head>
+			<link href="https://developer.github.com/assets/stylesheets/application.css" rel="stylesheet" type="text/css">
+			<style>
+				body {
+					padding: 2em;
+				}
+
+				section {
+					display: flex;
+				}
+
+				section>div {
+					flex: 1;
+				}
+
+				iframe {
+					width: 100%;
+					height: 50vh;
+				}
+
+				.route-info {
+					padding: 0 1em;
+				}
+
+				section {
+					margin-bottom: 2em;
+				}
+			</style>
+	</head>
+	<body class="content">
+		<h1>Afeefa Messaging API</h1>
+		
+		<section>
+			<div class="route-info">
+				<pre>POST /send/test</pre>
+				<table>
+					<thead>
+						<tr>
+							<th>Key</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<code>key</code>
+							</td>
+							<td>
+								<code>string</code>
+							</td>
+							<td>secret key to authorize</td>
+						</tr>
+						<tr>
+							<td>
+								<code>to</code>
+							</td>
+							<td>
+								<code>string</code>
+							</td>
+							<td>e-mail address, where the test mail is sent to</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<iframe src="/templates/mail/test.html"></iframe>
+			</div>
+		</section>
+		
+		<section>
+			<div class="route-info">
+				<pre>POST /send/newEntryInfo</pre>
+				<table>
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<code>key</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td>secret key to authorize</td>
+							</tr>
+							<tr>
+								<td>
+									<code>to</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td>e-mail address, where the mail is sent to<br>Default: <code>?</code></td>
+							</tr>
+							<tr>
+								<td>
+									<code>title</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>
+									<code>description</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+			</div>
+			<div>
+				<iframe src="/templates/mail/newEntryInfo.html"></iframe>
+			</div>
+		</section>
+	</body>
+</html>

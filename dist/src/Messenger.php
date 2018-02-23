@@ -3,12 +3,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// require 'vendor/phpmailer/phpmailer/src/Exception.php';
-// require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
-// require 'vendor/phpmailer/phpmailer/src/SMTP.php';
-
-// require 'vendor/autoload.php';
-
 class Messenger
 {
 	public $mail;
@@ -19,10 +13,9 @@ class Messenger
 
 		// read smtp config
 		$conf = parse_ini_file('config/smtpconf.ini');
-		// if (!$conf) die("smtp config missing");
 
 		//Server settings
-		$this->mail->SMTPDebug = 2;                                 // Enable verbose debug output
+		// $this->mail->SMTPDebug = 2;                                 // Enable verbose debug output
 		$this->mail->isSMTP();                                      // Set mailer to use SMTP
 		$this->mail->Host = $conf['host'];  // Specify main and backup SMTP servers
 		$this->mail->SMTPAuth = true;                               // Enable SMTP authentication
@@ -53,45 +46,9 @@ class Messenger
 		
 		try {
 			$this->mail->send();
-    	// echo 'Message has been sent';
+    		return array("code" => 201, "message" => "Message sent");
 		} catch (Exception $e) {
-			echo 'Message could not be sent. Mailer Error: ', $this->mail->ErrorInfo;
+			return array("code" => 500, "message" => 'Message could not be sent. Mailer Error: ' . $this->mail->ErrorInfo);
 		}
 	}
-
-	// /**
-	//  * @param $to
-	//  * @param $subject
-	//  * @param $msg
-	//  * @param null $replyTo
-	//  * @return bool|int
-	//  */
-	// public static function sendMail($from, $to, $subject, $msg, $replyTo = null, $htmlMsg = null, $showHtmlHeader = false)
-	// {
-	// 	if ($replyTo == null)
-	// 		$replyTo = $from;;
-
-	// 	$conf = parse_ini_file('smtpconf.ini');
-	// 	if (!$conf) die("Could not establish smtp connection.");
-
-	// 	$mailer = Swift_Mailer::newInstance(
-	// 		Swift_SmtpTransport::newInstance($conf['host'], $conf['port'], $conf['security'])
-	// 			->setUsername($conf['user'])
-	// 			->setPassword($conf['password'])
-	// 	);
-
-	// 	$message = Swift_Message::newInstance($subject, $msg)
-	// 		->setFrom($from)
-	// 		->setReplyTo($replyTo)
-	// 		->setTo(array($to));
-
-	// 	// Optionally add an alternative body
-	// 	if (isset($htmlMsg)) {
-	// 		$contentHTML = $showHtmlHeader ? MessageCenter::createAfeefaHtmlHeader() : '';
-	// 		$contentHTML .= nl2br($htmlMsg);
-	// 		$message->addPart($contentHTML, 'text/html');
-	// 	}
-
-	// 	return $mailer->send($message);
-	// }
 }

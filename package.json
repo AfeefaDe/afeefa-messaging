@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "Service in the afeefa universe which is responsible for everything that is sending and receiving messages like mails or push notifications etc.",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "mjml-chart": "^4.1.3"
+  },
   "devDependencies": {
     "mjml": "^3.3.5",
     "mjml-utils": "^2.2.1"
   },
   "scripts": {
+    "dev": "npm run templating",
+    "templating": "mju --watch -i ./templates/mail -o ./dist/templates/mail",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
