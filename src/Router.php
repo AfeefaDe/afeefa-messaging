@@ -11,8 +11,9 @@ class Router{
   
   public function defineRoutes() {
     Flight::route('/', function(){
+      $json = $this->validateRequest();
+      
       echo 'Afeefa Message API index route, nothing here to do';
-      die;
     });
 
     Flight::route('POST /send/test', function() {
@@ -26,7 +27,9 @@ class Router{
       # send message
       $Messenger = new Messenger;
       $Messenger->send($message, $json);
+      
       # log messaging
+      # ...
     });
 
     Flight::route('GET /send/userMessageToContact', function() {
