@@ -31,6 +31,15 @@
 	<body class="content">
 		<h1>Afeefa Messaging API</h1>
 		
+		<p><strong>Notice:</strong></p>
+		<ul>
+			<li>the <code>{{placeholders}}</code> in the template are possible parameters; for simplicity they are not documented in the params table</li>
+			<li>Pass in all parameters as json like so <code>{
+					"to":"max@test.de",
+					"key":"9zf8sdf"
+				}</code></li>
+			<li>also be sure to set "Content-Type" header to "application/json"</li>
+		</ul>
 		<section>
 			<div class="route-info">
 				<pre>POST /send/test</pre>
@@ -101,21 +110,12 @@
 							</tr>
 							<tr>
 								<td>
-									<code>title</code>
+									<code>reply_to</code>
 								</td>
 								<td>
 									<code>string</code>
 								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>
-									<code>description</code>
-								</td>
-								<td>
-									<code>string</code>
-								</td>
-								<td></td>
+								<td>you might take the initiator's email address if available</td>
 							</tr>
 						</tbody>
 					</table>

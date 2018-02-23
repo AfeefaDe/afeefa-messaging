@@ -30,7 +30,7 @@ class Messenger
     $this->mail->setFrom($message['from']['address'], $message['from']['name']);
     $this->mail->addAddress($json->to);     // Add a recipient
     // $this->mail->addAddress('ellen@example.com');               // Name is optional
-    // $this->mail->addReplyTo('info@example.com', 'Information');
+    if ($json['reply_to']) $this->mail->addReplyTo($json['reply_to']);
     // $this->mail->addCC('cc@example.com');
     // $this->mail->addBCC('bcc@example.com');
 

@@ -94,8 +94,8 @@ Service in the afeefa universe which is responsible for everything that is sendi
 ||| entry: {**entry_id** :int, **entry_type** :string(actor/offer/event/ressource), **recipient_email** :address, **title** :string, **last_updated** :time } | |
 |/send/adminLinkToOwner| POST ||| case B
 |/send/newEntryInfo| POST ||| case C
-|/send/editorMessageToContact| POST ||| case D
-|/send/userMessageToContact| POST ||| case E
+|/send/messageFromEditorToOwner| POST ||| case D
+|/send/messageFromUserToOwner| POST ||| case E
 
 ## Dependencies to other services
 - needs information from `afeefa-backend-api` about outdated entries to send the emails
@@ -104,7 +104,8 @@ Service in the afeefa universe which is responsible for everything that is sendi
 ## Development
 1. checkout repo in a desired place
 2. Install all dependencies via `$ composer install` AND `$ npm install`
-3. create config files `/config/smtpconf.ini` and `/config/auth.ini` from provided example files
+3. create config files `/config/smtpconf.ini` and `/config/auth.ini` and `/config/template_vars.php` from provided example files
+1. create `.htaccess` file from provided example file
 1. serve `/dist` folder with php like `$ php -S localhost:3010 -t dist/`
 2. `$ npm run dev` to watch and build all mail templates
 1. fire requests to the routes, e.g. using postman
@@ -112,9 +113,19 @@ Service in the afeefa universe which is responsible for everything that is sendi
 **render a specific mail template without watching**  
 `$ ./node_modules/.bin/mjml mail_templates/name.mjml --output mail_templates_built/name.html`
 
+**create a new mail template**
+1. create new route in `Router.php`
+    - the method `build('[template-key]', $json);` needs a custom string value for naming the template
+    - following the convention, other things refer to this *template key*
+1. create a mjml template file in `/templates/mail`
+    - file name must be `[template-key].mjml`
+    - style it and use data placeholders if needed
+1. provide necessary data in `/config/template_vars.php` like the mail's *subject* or *reply-to-address*
+1. [would be nice] document it in `dist/view/index.html`
+
 ## Deployment
 1. checkout repo in a temporary location
 2. Install all dependencies via `$ composer install`
 3. copy the folder `/dist` to the final location and continue there
-3. create config files `/config/smtpconf.ini` and `/config/auth.ini` from provided example files
+3. create config files `/config/smtpconf.ini` and `/config/auth.ini` and `/config/template_vars.php` from provided example files
 4. create `.htaccess` file from provided example file

@@ -10,33 +10,39 @@ class Router{
   }
   
   public function defineRoutes() {
+    
+    ## >>> ##
     Flight::route('/', function(){
-      $json = $this->validateRequest();
+      // $json = $this->validateRequest();
       
       include('views/index.html');
     });
 
+    ## >>> ##
     Flight::route('POST /send/test', function() {
       
       $json = $this->validateRequest();
       
       # build message
       $MessageBuilder = new MessageBuilder;
-      $message = $MessageBuilder->testMail($json);
+      $message = $MessageBuilder->build('test', $json);
 
       # send message
       $Messenger = new Messenger;
-      $status = $Messenger->send($message, $json);
-      Flight::halt($status['code'], $status['message']);
-      
-      # log messaging
-      # ...
-
-      die;
+      $this->returnStatus( $Messenger->send($message, $json) );
     });
 
-    Flight::route('GET /send/userMessageToContact', function() {
+    ## >>> ##
+    Flight::route('POST /send/newEntryInfo', function() {
       $json = $this->validateRequest();
+
+      # build message
+      $MessageBuilder = new MessageBuilder;
+      $message = $MessageBuilder->build('newEntryInfo', $json);
+
+      # send message
+      $Messenger = new Messenger;
+      $this->returnStatus( $Messenger->send($message, $json) );
     });
   }
   
@@ -60,6 +66,11 @@ class Router{
       Flight::halt(401, "access denied");
       die;
     }
+  }
+
+  public function returnStatus( $status ) {
+    Flight::halt( $status['code'], $status['message'] );
+    die;
   }
 }
 

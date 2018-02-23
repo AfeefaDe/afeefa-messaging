@@ -2,30 +2,34 @@
 
 class MessageBuilder{
 
-	public $template_vars;
+	public $tvars;
+	public $template_key;
 
 	public function __construct()
 	{
 		// set template presets
-		$this->template_vars = include('./config/template_vars.php');
+		$this->tvars = include('./config/template_vars.php');
   	}
 	
-	public function testMail( $data ){
+	public function build( $template_key, $data ){
+		// keep template key param inside class attribute
+		$this->template_key = $template_key;
+		
 		// prepare placeholder data for template
-		$placeholders = array(
-			"host" => $_SERVER['HTTP_HOST']
-		);
+		$placeholders = array_values( (array) $data )[0]; // TODO: dont take all the POST data, but hey ;)
 
+		// additional placeholders?
+		switch ($this->template_key) {
+			case 'test':
+				$placeholders["host"] = $_SERVER['HTTP_HOST'];
+				break;
+		}
+		
 		// merge placeholder data into template
-		$html = $this->merge('test', $placeholders);
+		$html = $this->merge($this->template_key, $placeholders);
 		
 		// return generated message string
-		return array(
-			"html"=>$html,
-			"text"=>$html,
-			"subject"=>"Test mail",
-			"from" => array("address" => "team@afeefa.de", "name" => "Afeefa.de")
-		);
+		return $this->createFinalMessage($html);
 	}
 
 	public static function merge($template, array $placeholders, $errPlaceholder = null)
@@ -63,6 +67,13 @@ class MessageBuilder{
 		};
 
 		return preg_replace_callback($expr, $callback, $string);
+	}
+
+	public function createFinalMessage( $html ) {
+		$message = $this->tvars["mail"][$this->template_key];
+		$message["html"] = $html;
+		$message["text"] = $html;
+		return $message;
 	}
 	
 	// /**
