@@ -19,16 +19,16 @@ class Router{
     });
 
     Flight::route('POST /send/test', function(){
-      $this->auth();
       
-      $json = $this->checkParams(Flight::request()->data);
+      $json = $this->validateRequest();
       
       # send mail to given address
       echo "sending test mail to: " . $json->to;
     });
 
     Flight::route('GET /send/userMessageToContact', function(){
-      if(!$this->auth()) return;
+      $json = $this->validateRequest();
+      
       # build message
       # send message
       # log messaging
@@ -37,12 +37,27 @@ class Router{
   
   public function auth(){
     $valid = true;
-    if(!$valid) Flight::halt(401);
+    if(!$valid) {
+      Flight::halt(401, "access denied");
+      die;
+    }
   }
 
-  public function checkParams($request_data){
-    if(count($request_data)) return $request_data;
-    else Flight::halt(500, 'bad params');
+  public function validateRequest(){
+    $this->auth();
+    
+    // check parameters
+    $req_data = Flight::request()->data;
+    if(count($req_data)) {
+      return $req_data;
+    }
+    else {
+      Flight::halt(400, 'please provide json data as required; also be sure to set "Content-Type" header to "application/json"');
+      die;
+    }
+
+    // check other things
+    // ...
   }
 }
 
