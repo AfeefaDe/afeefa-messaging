@@ -9,9 +9,9 @@ class MessageBuilder{
 	{
 		// set template presets
 		$this->tvars = include('./config/template_vars.php');
-  	}
+	}
 	
-	public function build( $template_key, $data ){
+	public function build($message_type, $template_key, $data ){
 		// keep template key param inside class attribute
 		$this->template_key = $template_key;
 		
@@ -25,17 +25,22 @@ class MessageBuilder{
 				break;
 		}
 		
-		// merge placeholder data into template
-		$html = $this->merge($this->template_key, $placeholders);
-		
-		// return generated message string
-		return $this->createFinalMessage($html);
+		if ( $message_type == 'email' ) {
+			// merge placeholder data into template
+			$html = $this->merge('./templates/mail/' .$template_key. '.html', $placeholders);
+			
+			// return generated message string
+			return $html;
+		}
+		else if ($message_type == 'slack') {
+			// merge placeholder data into template
+			$html = $this->merge('./templates/slack/' .$template_key. '.txt', $placeholders);
+		}
 	}
 
-	public static function merge($template, array $placeholders, $errPlaceholder = null)
+	public static function merge($file, array $placeholders, $errPlaceholder = null)
 	{
 		// load template file
-		$file = './templates/mail/' .$template. '.html';
 		if (file_exists($file)) {
 			$string = file_get_contents($file);
 		}
@@ -60,6 +65,8 @@ class MessageBuilder{
 				default:
 					if (isset($placeholders[$match[1]])) {
 						return $placeholders[$match[1]];
+					} else {
+						return '-';
 					}
 
 					return isset($errPlaceholder) ? $errPlaceholder : $match[0];
@@ -69,13 +76,39 @@ class MessageBuilder{
 		return preg_replace_callback($expr, $callback, $string);
 	}
 
-	public function createFinalMessage( $html ) {
-		$message = $this->tvars["mail"][$this->template_key];
-		$message["html"] = $html;
-		$message["text"] = $html;
-		return $message;
-	}
+	// public function createFinalMail( $html ) {
+	// 	$message = $this->tvars["mail"][$this->template_key];
+	// 	$message["html"] = $html;
+	// 	$message["text"] = $html;
+	// 	return $message;
+	// }
 	
+// to slack
+// APP.getDataManager().createSlackMessage({
+// 	heading: function () {
+// 			var entryTypeString = entryTypes[data.entry.type];
+// 			var marketTypeString = (data.entry.offer) ? 'Angebot' : 'Gesuch';
+// 			if (data.entry.type == 1) entryTypeString += ' (' + marketTypeString + ')'
+// 			return 'Neuer Eintrag: ' + entryTypeString + ' "' + data.entry.name + '"'
+// 	}(),
+// 	message: '```\n' + data.entry.descriptionShort + '\n```\n'
+// 	+ 'für Kinder: `' + (data.entry.forChildren ? 'ja' : '-') + '`\n'
+// 	+ 'Unterstützer gesucht: `' + (data.entry.supportWanted ? 'ja' : 'nein') + '`\n'
+// 	+ 'Unterstützung Details: `' + data.additional.internalComment + '`\n'
+// 	+ 'Kontaktperson: `' + data.entry.speakerPublic + '`\n'
+// 	+ 'Sprachen: `' + data.entry.spokenLanguages + '`\n'
+// 	+ 'mail: `' + data.entry.mail + '` '
+// 	+ 'web: `' + data.entry.web + '` '
+// 	+ 'facebook: `' + data.entry.facebook + '` '
+// 	+ 'phone: `' + data.entry.phone + '`\n'
+// 	+ 'Ort: `' + data.location.placename + ', ' + data.location.street + ', ' + data.location.zip + ' ' + data.location.city + '`\n'
+// 	+ 'von: `' + data.entry.dateFrom + ' (' + data.entry.timeFrom + ')' + '`\n'
+// 	+ 'bis: `' + data.entry.dateTo + ' (' + data.entry.timeTo + ')' + '`\n'
+// 	+ 'Anmerkung: `' + data.additional.comment + '`\n'
+// }, null, APP.getArea().dataKey);
+
+
+
 	// /**
 	//  * @param $user
 	//  * @return String

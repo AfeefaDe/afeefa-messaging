@@ -25,28 +25,32 @@ class Messenger
 		$this->mail->Port = $conf['port'];                                    // TCP port to connect to
 	}
 
-	public function send($message, $json) {
+	public function sendMail($message, $template_key, $json) {
+		
+		// Sender
+    $this->mail->setFrom($GLOBALS["tvars"]["mail"][$template_key]['from']['address'], $GLOBALS["tvars"]["mail"][$template_key]['from']['name']);
+    if (isset($json['reply_to'])) $this->mail->addReplyTo($json['reply_to']);
+		
 		//Recipients
-    $this->mail->setFrom($message['from']['address'], $message['from']['name']);
-    $this->mail->addAddress($json->to);     // Add a recipient
-    // $this->mail->addAddress('ellen@example.com');               // Name is optional
-    if ($json['reply_to']) $this->mail->addReplyTo($json['reply_to']);
-    // $this->mail->addCC('cc@example.com');
-    // $this->mail->addBCC('bcc@example.com');
-
-    //Attachments
-    // $this->mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-    // $this->mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-
+		if (isset($json->to)) {
+			$this->mail->addAddress($json->to);     // Add a recipient
+		}
+		else if (isset($GLOBALS["tvars"]["mail"][$template_key]['to'])) {
+			$addresses = explode(',', $GLOBALS["tvars"]["mail"][$template_key]['to']);
+			foreach ($addresses as $i=>$address) {
+				$this->mail->addBCC($address);
+			}
+		}
+		
     //Content
     $this->mail->isHTML(true);                                  // Set email format to HTML
-    $this->mail->Subject = $message['subject'];
-    $this->mail->Body    = $message['html'];
-    $this->mail->AltBody = $message['text'];
+    $this->mail->Subject = $GLOBALS["tvars"]["mail"][$template_key]['subject'];
+    $this->mail->Body    = $message;
+    $this->mail->AltBody = $message;
 		
 		try {
 			$this->mail->send();
-    		return array("code" => 201, "message" => "Message sent");
+			return array("code" => 201, "message" => "Message sent");
 		} catch (Exception $e) {
 			return array("code" => 500, "message" => 'Message could not be sent. Mailer Error: ' . $this->mail->ErrorInfo);
 		}
