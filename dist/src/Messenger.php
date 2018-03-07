@@ -15,7 +15,7 @@ class Messenger
 		$conf = parse_ini_file('config/smtpconf.ini');
 
 		//Server settings
-		// $this->mail->SMTPDebug = 2;                                 // Enable verbose debug output
+		$this->mail->SMTPDebug = 2;                                 // Enable verbose debug output
 		$this->mail->isSMTP();                                      // Set mailer to use SMTP
 		$this->mail->Host = $conf['host'];  // Specify main and backup SMTP servers
 		$this->mail->SMTPAuth = true;                               // Enable SMTP authentication
