@@ -81,6 +81,7 @@
 		<section>
 			<div class="route-info">
 				<pre>POST /send/newEntryInfo</pre>
+				<p>the mail's reply_to is being set to {{email}}</p>
 				<table>
 						<thead>
 							<tr>
@@ -106,22 +107,91 @@
 								<td>
 									<code>string</code>
 								</td>
-								<td>e-mail address, where the mail is sent to<br>Default: <code>?</code></td>
-							</tr>
-							<tr>
-								<td>
-									<code>reply_to</code>
-								</td>
-								<td>
-									<code>string</code>
-								</td>
-								<td>you might take the initiator's email address if available</td>
+								<td>e-mail address, where the mail is sent to<br>Default: <code>see config</code></td>
 							</tr>
 						</tbody>
 					</table>
 			</div>
 			<div>
 				<iframe src="/templates/mail/newEntryInfo.html"></iframe>
+			</div>
+		</section>
+
+		<section>
+			<div class="route-info">
+				<pre>POST /send/messageFromUserToOwner</pre>
+				<p>the mail's reply_to is being set to {{email}}</p>
+				<table>
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<code>key</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td>secret key to authorize</td>
+							</tr>
+							<tr>
+								<td>
+									<code>to</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td>email address of the entry owner, who receives the user's message</td>
+							</tr>
+						</tbody>
+					</table>
+			</div>
+			<div>
+				<iframe src="/templates/mail/messageFromUserToOwner.html"></iframe>
+			</div>
+		</section>
+
+		<section>
+			<div class="route-info">
+				<pre>POST /send/feedbackFromUserToAdmins</pre>
+				<p>the mail's reply_to is being set to {{email}}</p>
+				<table>
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<code>key</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td>secret key to authorize</td>
+							</tr>
+							<tr>
+								<td>
+									<code>to</code>
+								</td>
+								<td>
+									<code>string</code>
+								</td>
+								<td>e-mail address, where the mail is sent to<br>Default: <code>see config</code></td>
+							</tr>
+						</tbody>
+					</table>
+			</div>
+			<div>
+				<iframe src="/templates/mail/feedbackFromUserToAdmins.html"></iframe>
 			</div>
 		</section>
 	</body>

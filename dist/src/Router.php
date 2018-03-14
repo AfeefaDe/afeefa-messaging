@@ -65,6 +65,21 @@ class Router{
       $Messenger = new Messenger;
       $this->returnStatus( $Messenger->sendMail($message, $template_key, $json) );
     });
+
+    Flight::route('POST /send/feedbackFromUserToAdmins', function() {
+      $json = $this->validateRequest();
+
+      $template_key = 'feedbackFromUserToAdmins';
+
+      # build message
+      $MessageBuilder = new MessageBuilder;
+      $message = $MessageBuilder->build('email', $template_key, $json);
+      // $message = $MessageBuilder->build('slack', 'messageFromUserToOwner', $json);
+
+      # send message
+      $Messenger = new Messenger;
+      $this->returnStatus( $Messenger->sendMail($message, $template_key, $json) );
+    });
   }
   
   public function validateRequest() {

@@ -25,6 +25,12 @@
           <mj-text><a href="{{backend_link}}">{{backend_link}}</a></mj-text>
         </mj-column>
       </mj-section>
+
+      <mj-section>
+        <mj-column>
+          <mj-text mj-class="signature">Die Nachricht wurde über das öffentliche Eintragsformular auf Afeefa.de verschickt.</mj-text>
+        </mj-column>
+      </mj-section>
       <!-- content end -->
       
       <mj-section>
