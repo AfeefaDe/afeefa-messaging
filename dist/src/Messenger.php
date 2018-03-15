@@ -48,11 +48,38 @@ class Messenger
     $this->mail->Body    = $message;
     $this->mail->AltBody = $message;
 		
+		// callback for result
+		$this->mail->action_function = array($this, 'callbackAction');
+		
 		try {
 			$this->mail->send();
 			return array("code" => 201, "message" => "Message sent");
 		} catch (Exception $e) {
-			return array("code" => 500, "message" => 'Message could not be sent. Mailer Error: ' . $this->mail->ErrorInfo);
+			return array("code" => 500, "message" => "Message send failed\n" . $this->mail->ErrorInfo);
 		}
+	}
+	
+	public function callbackAction($result, $to, $cc, $bcc, $subject, $body)
+	{
+		$log;
+		if ($result) {
+			$log = "E-Mail sent successfully\n";
+		} else {
+			$log = "E-Mail send failed\n";
+			$log .= $this->mail->ErrorInfo;
+		}
+
+		$log .= "Subject: \"$subject\"\n";
+		foreach ($to as $address) {
+			$log .= "To: {$address[1]} <{$address[0]}>\n";
+		}
+		foreach ($cc as $address) {
+			"CC: {$address[1]} <{$address[0]}>\n";
+		}
+		foreach ($bcc as $toaddress) {
+			"BCC: {$toaddress[1]} <{$toaddress[0]}>\n";
+		}
+
+		if ($log) error_log($log, 0);
 	}
 }
