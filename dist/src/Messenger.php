@@ -37,8 +37,12 @@ class Messenger
 		}
 		else if (isset($GLOBALS["tvars"]["mail"][$template_key]['to'])) {
 			$addresses = explode(',', $GLOBALS["tvars"]["mail"][$template_key]['to']);
-			foreach ($addresses as $i=>$address) {
-				$this->mail->addBCC($address);
+			if (count($addresses) == 1) {
+				$this->mail->addAddress($addresses[0]);
+			} else {
+				foreach ($addresses as $i=>$address) {
+					$this->mail->addBCC($address);
+				}
 			}
 		}
 		
@@ -74,10 +78,10 @@ class Messenger
 			$log .= "To: {$address[1]} <{$address[0]}>\n";
 		}
 		foreach ($cc as $address) {
-			"CC: {$address[1]} <{$address[0]}>\n";
+			$log .= "CC: {$address[1]} <{$address[0]}>\n";
 		}
 		foreach ($bcc as $toaddress) {
-			"BCC: {$toaddress[1]} <{$toaddress[0]}>\n";
+			$log .= "BCC: {$toaddress[1]} <{$toaddress[0]}>\n";
 		}
 
 		if ($log) error_log($log, 0);
