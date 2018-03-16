@@ -10,6 +10,7 @@ class Messenger
 	public function __construct()
 	{
 		$this->mail = new PHPMailer(true);
+		$this->mail->CharSet = 'UTF-8';
 
 		// read smtp config
 		$conf = parse_ini_file('config/smtpconf.ini');
