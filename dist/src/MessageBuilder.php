@@ -34,7 +34,9 @@ class MessageBuilder{
 		}
 		else if ($message_type == 'slack') {
 			// merge placeholder data into template
-			$html = $this->merge('./templates/slack/' .$template_key. '.txt', $placeholders);
+			$json = $this->merge('./templates/slack/' .$template_key. '.json', $placeholders);
+
+			return $json;
 		}
 	}
 

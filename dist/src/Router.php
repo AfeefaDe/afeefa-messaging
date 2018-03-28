@@ -13,7 +13,7 @@ class Router{
     
     ## >>> ##
     Flight::route('/', function(){
-      // $json = $this->validateRequest();
+      $json = $this->validateRequest(true);
       
       include('views/index.html');
     });
@@ -25,13 +25,16 @@ class Router{
       
       $template_key = 'test';
       
-      # build message
       $MessageBuilder = new MessageBuilder;
-      $message = $MessageBuilder->build('email', $template_key, $json);
-
-      # send message
       $Messenger = new Messenger;
+      
+      # build and send email
+      $message = $MessageBuilder->build('email', $template_key, $json);
       $this->returnStatus( $Messenger->sendMail($message, $template_key, $json) );
+      
+      # build and send slack
+      $message = $MessageBuilder->build('slack', $template_key, $json);
+      $Messenger->sendSlack($message);
     });
 
     ## >>> ##
@@ -40,14 +43,16 @@ class Router{
       
       $template_key = 'newEntryInfo';
       
-      # build message
       $MessageBuilder = new MessageBuilder;
-      $message = $MessageBuilder->build('email', $template_key, $json);
-      // $message = $MessageBuilder->build('slack', 'newEntryInfo', $json);
-      
-      # send message
       $Messenger = new Messenger;
+
+      # build and send email
+      $message = $MessageBuilder->build('email', $template_key, $json);
       $this->returnStatus( $Messenger->sendMail($message, $template_key, $json) );
+
+      # build and send slack
+      $message = $MessageBuilder->build('slack', $template_key, $json);
+      $Messenger->sendSlack($message);
     });
 
     ## >>> ##
@@ -56,34 +61,35 @@ class Router{
 
       $template_key = 'messageFromUserToOwner';
 
-      # build message
       $MessageBuilder = new MessageBuilder;
-      $message = $MessageBuilder->build('email', $template_key, $json);
-      // $message = $MessageBuilder->build('slack', 'messageFromUserToOwner', $json);
-
-      # send message
       $Messenger = new Messenger;
+
+      # build and send email
+      $message = $MessageBuilder->build('email', $template_key, $json);
       $this->returnStatus( $Messenger->sendMail($message, $template_key, $json) );
     });
-
+    
     Flight::route('POST /send/feedbackFromUserToAdmins', function() {
       $json = $this->validateRequest();
-
+      
       $template_key = 'feedbackFromUserToAdmins';
-
-      # build message
+      
       $MessageBuilder = new MessageBuilder;
-      $message = $MessageBuilder->build('email', $template_key, $json);
-      // $message = $MessageBuilder->build('slack', 'messageFromUserToOwner', $json);
-
-      # send message
       $Messenger = new Messenger;
+      
+      # build and send email
+      $message = $MessageBuilder->build('email', $template_key, $json);
       $this->returnStatus( $Messenger->sendMail($message, $template_key, $json) );
+      
+      # build and send slack
+      $message = $MessageBuilder->build('slack', $template_key, $json);
+      $Messenger->sendSlack($message);
     });
   }
   
-  public function validateRequest() {
+  public function validateRequest( $skip_auth = false ) {
     // authenticate
+    if ($skip_auth) return;
     $this->auth();
 
     $this->evaluateTemplateVars();
@@ -112,8 +118,6 @@ class Router{
         }
       }
 
-      // print_r($vars);
-      // die;
       $GLOBALS['tvars'] = $vars;
   }
   
@@ -127,7 +131,6 @@ class Router{
 
   public function returnStatus( $status ) {
     Flight::halt( $status['code'], $status['message'] );
-    die;
   }
 }
 

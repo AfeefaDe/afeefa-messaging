@@ -1,0 +1,15 @@
+{
+  "attachments":[
+    {
+       "fallback":"Neuer Eintrag: {{title}}",
+       "color":"#8de0b2",
+       "fields":[
+          {
+             "title":":muscle: Neuer Eintrag: _{{title}}_",
+             "value":"_{{description}}_\n_{{name}}_ | _{{email}}_\n<{{backend_link}}>",
+             "short": false
+          }
+       ]
+    }
+ ]
+}

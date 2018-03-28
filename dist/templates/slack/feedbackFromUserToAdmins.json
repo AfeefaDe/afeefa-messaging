@@ -1,0 +1,15 @@
+{
+  "attachments":[
+    {
+       "fallback":"Feedback zum Eintrag: {{title}}",
+       "color":"#f4f442",
+       "fields":[
+          {
+             "title":":point_up: Feedback zum Eintrag: _{{title}}_",
+             "value":"_{{message}}_\n_{{author}}_ | _{{mail}}_ | _{{phone}}_\n<{{backend_link}}> | <{{frontend_link}}>",
+             "short": false
+          }
+       ]
+    }
+ ]
+}

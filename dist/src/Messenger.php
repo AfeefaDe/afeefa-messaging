@@ -87,4 +87,17 @@ class Messenger
 
 		if ($log) error_log($log, 0);
 	}
+
+	public function sendSlack ( $message_payload ) {
+		 // Make your message
+		//  $message = array('payload' => json_encode(array('text' => $message_content)));
+		 $message = array('payload' => $message_payload);
+		 // Use curl to send your message
+		 $c = curl_init( $GLOBALS["tvars"]["slack"]['webhook_url'] );
+		 curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+		 curl_setopt($c, CURLOPT_POST, true);
+		 curl_setopt($c, CURLOPT_POSTFIELDS, $message);
+		 curl_exec($c);
+		 curl_close($c);
+	}
 }
