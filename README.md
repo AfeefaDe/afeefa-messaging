@@ -117,3 +117,4 @@ see index route `/` which renders a tiny API doc
 3. copy the folder `/dist` to the final location and continue there
 3. create config files `/config/smtpconf.ini` and `/config/auth.ini` and `/config/template_vars.php` from provided example files
 4. create `.htaccess` file from provided example file
+
